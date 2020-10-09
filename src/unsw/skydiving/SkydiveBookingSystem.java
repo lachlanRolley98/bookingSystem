@@ -53,7 +53,7 @@ public class SkydiveBookingSystem {
 
         Scanner sc = new Scanner(System.in);
 
-        while (sc.hasNextLine()) {
+        while (sc.hasNextLine()) { // pre sure this just reads line by line and sends each line individually to system.processCommand
             String line = sc.nextLine();
             if (!line.trim().equals("")) {
                 JSONObject command = new JSONObject(line);
