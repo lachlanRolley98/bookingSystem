@@ -1,6 +1,8 @@
 package unsw.skydiving;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
+
 
 public class Skydiver {
     //im thinking have classes that extend skdiver for there licence type but cbs aye
@@ -10,11 +12,13 @@ public class Skydiver {
     public int level;        // i feel it would be easier to have licences as levels so can scan through and go >2
     public String dropzone;  // some wont have one of these
     public LocalDateTime earliestJumptime ; //initiialy this will be really early, just check that the jump is after this (+ brief)
+    public ArrayList<Jump> skydiverJumpsList;
 
     public Skydiver(String name, String licence, String dropzone){
         this.name = name;
         this.licence = licence;
         this.dropzone = dropzone;
+        this.skydiverJumpsList = new ArrayList<Jump>();
         switch(licence){
             case "student":
             level = 1; break;        
@@ -35,6 +39,7 @@ public class Skydiver {
         this.name = name;
         this.licence = licence;
         this.dropzone = "Looser skydiver doesnt have dropzone";
+        this.skydiverJumpsList = new ArrayList<Jump>();
         switch(licence){
             case "student":
             level = 1; break;        
@@ -48,6 +53,35 @@ public class Skydiver {
         }
 
         
+    }
+
+    public int checkAvaliable(Skydiver jumper, Flight flight){  // this check is for the funjumpers
+        int avaliable = 1;
+        //we wana check start time
+        if((jumper.earliestJumptime.isAfter(flight.starttime))){return 0;}
+        if(jumper.level < 2){return 0;}
+        return avaliable;
+    }
+
+    public boolean checkjumpTimeAvaliable(Skydiver jumper, Flight flight, LocalDateTime starttime){  // you still have to check if licence is good enough
+        //this will run through all the jumpers jumps and check if this starttime is before (flight start - whatever) or after
+        if(starttime.isAfter(flight.starttime)){return false;}
+        
+        //we are here because we know the startime they have put is before the flight start so we are g
+        //now we gota check if they have a (flight earlier than + unpack/debreif )it that ends after the flight.starttime
+        if(jumper.skydiverJumpsList.isEmpty()){
+            return true;
+        }
+        for(Jump jump : jumper.skydiverJumpsList){
+            //we in here cos know they have a jump, we runthrough jumps now, 
+        }
+        
+        
+        
+        
+        
+        
+        return false;
     }
 
 }

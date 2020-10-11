@@ -29,9 +29,14 @@ public class Flight {
         this.endtime = endtime;
     }
 
-    public void addJump(Jump jump){      // cos we have no idea how many people gona jump, gota add them individually, not in constructor
+    public void addJump(Jump jump){      
         jumpsInFlight.add(jump);
         peopleOnboard = peopleOnboard + 2;
+    }
+
+    public void addJump(Jump jump, int size){      // cos we have no idea how many people gona jump, gota add them individually, not in constructor
+        jumpsInFlight.add(jump);
+        peopleOnboard = peopleOnboard + size;
     }
 	
 	

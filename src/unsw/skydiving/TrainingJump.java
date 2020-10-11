@@ -3,15 +3,22 @@ import java.time.LocalDateTime;
 
 
 public class TrainingJump extends Jump{
-    public String InstructorName; // this will be changed the skydiver object
-    public String traineeName; // this will be changed the skydiver object
+    public Skydiver InstructorName; 
+    public Skydiver traineeName; 
 
-    public TrainingJump(String type, LocalDateTime starttime, String desination , String MasterName, String traineeName){
+    public TrainingJump(String type, LocalDateTime starttime, LocalDateTime endtime , String desination , Skydiver InstructorName, Skydiver traineeName){
     this.type = type;
     this.starttime = starttime; 
+    this.endtime = endtime;
     this.desination = desination;
-    this.InstructorName = MasterName;
+    this.InstructorName = InstructorName;
     this.traineeName =  traineeName;
+    updateSkydiverAvaliability();
+    }
+
+    public void updateSkydiverAvaliability(){
+        InstructorName.earliestJumptime = endtime.plusMinutes(25); // he gota repack, the passenger doesnt
+        traineeName.earliestJumptime = endtime.plusMinutes(15);
     }
     
 }

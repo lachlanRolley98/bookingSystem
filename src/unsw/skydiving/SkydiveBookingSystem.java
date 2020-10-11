@@ -90,7 +90,7 @@ public class SkydiveBookingSystem {
                     //we just making it now for fun
                     //check if person can jump
                     
-                    Skydiver Tandempassenger;
+                    Skydiver Tandempassenger;          //put all this method in tandem later
                     for(Skydiver diver: skydivers){    // this is really bad style im guessing, fix if can be fucked later                       
                         if(diver.name.equals(passengerName) && status != 1 ){
                             Tandempassenger = diver;
@@ -99,13 +99,19 @@ public class SkydiveBookingSystem {
                                 if((flight.starttime.isAfter(starttimeJ.plusMinutes(5)) || flight.starttime.isEqual(starttimeJ.plusMinutes(5))) && (flight.starttime.getDayOfMonth() == starttimeJ.getDayOfMonth()) && (flight.maxload - flight.peopleOnboard >= 2) && status != 1){ // this is like >=
                                     //aight we found a flight so gota try find a Jump master that fits
                                     for(Skydiver diver2 : skydivers){                                  
-                                       if((flight.starttime.isAfter(diver2.earliestJumptime.plusMinutes(5))) || (flight.starttime.isEqual(diver2.earliestJumptime)) && diver2.level == 4 && diver2.dropzone.equals(flight.dropzone) && status != 1) {
+                                       if(((flight.starttime.isAfter(diver2.earliestJumptime.plusMinutes(5))) || (flight.starttime.isEqual(diver2.earliestJumptime.plusMinutes(5)))) && diver2.level == 4 && diver2.dropzone.equals(flight.dropzone) && status != 1 && !diver2.equals(Tandempassenger)) {
                                            //we got a match baby book em in
                                            MasterName = diver2;
                                            //when we book the jump, also have to update the peoples info 
-                                           TandemJump jumpX = new TandemJump(type, starttimeJ, flight.endtime, dropzoneJ, MasterName, Tandempassenger);
+                                           TandemJump jumpX = new TandemJump(type, starttimeJ, flight.endtime, flight.dropzone, MasterName, Tandempassenger);
+                                            //System.out.println(MasterName.name + " has a first avaliable time of: " + MasterName.earliestJumptime.toString() );
+                                            //System.out.println(Tandempassenger.name + " has a first avaliable time of: " + Tandempassenger.earliestJumptime.toString() );
+
+                                           
                                            jumps.add(jumpX);
                                            flight.addJump(jumpX);
+                                           diver2.skydiverJumpsList.add(jumpX);
+                                           Tandempassenger.skydiverJumpsList.add(jumpX);
                                            status = 1;
                                            break;
                                        }
@@ -115,11 +121,12 @@ public class SkydiveBookingSystem {
                             break;
                         }
                     }
+                    /*System.out.println("\n" );
                     if(status == 1){
-                        System.out.println("jump was booked");
+                        System.out.println("tandem jump was booked" );
                     }else{
-                        System.out.println("couldnt book");
-                    }
+                        System.out.println("couldnt book tandem jump");
+                    }*/
                     
                     
                 break;
@@ -131,15 +138,47 @@ public class SkydiveBookingSystem {
 
                 case "training":
                     String traineeName = json.getString("trainee");
-                    String InstructorName = "Master not found yet";
-                    //do all our checks and shit
-                    //if all good
-                    TrainingJump jumpY = new TrainingJump(type, starttimeJ, dropzoneJ , InstructorName, traineeName);
-                    //set endtime
-                    //set dropzone
-                    //flights.get(0).addJump(jumpY);
-                    jumps.add(jumpY);
+                    Skydiver InstructorName ;
+                    
+                    Skydiver trainee;          //put all this method in tandem later
+                    for(Skydiver diver: skydivers){    // this is really bad style im guessing, fix if can be fucked later                       
+                        if(diver.name.equals(traineeName) && status != 1 ){
+                            trainee = diver;
+                            for(Flight flight: flights){                                                              
+                                //we gota find a flight whoes starttime is 5mims after starttimeJ(the persons arival time)
+                                if((flight.starttime.isAfter(starttimeJ) || flight.starttime.isEqual(starttimeJ)) && (flight.starttime.getDayOfMonth() == starttimeJ.getDayOfMonth()) && (flight.maxload - flight.peopleOnboard >= 2) && status != 1){ // this is like >=
+                                    //aight we found a flight so gota try find a Jump master that fits
+                                    for(Skydiver diver2 : skydivers){         
+                                        //System.out.print("diver2.dropzone is :" + diver2.dropzone +"flight.dropzone is " + flight.dropzone);                         
+                                        if(((flight.starttime.isAfter(diver2.earliestJumptime) || (flight.starttime.isEqual(diver2.earliestJumptime))) && diver2.level >= 3 && diver2.dropzone.equals(flight.dropzone) && status != 1) && !diver2.equals(trainee)) {
+                                           //we got a match baby book em in
+                                           InstructorName = diver2;
+                                           //when we book the jump, also have to update the peoples info 
+                                           TrainingJump jumpY = new TrainingJump(type, starttimeJ, flight.endtime, flight.dropzone , InstructorName, trainee);
+
+                                           jumps.add(jumpY);
+                                           flight.addJump(jumpY);
+                                           diver2.skydiverJumpsList.add(jumpY);
+                                           trainee.skydiverJumpsList.add(jumpY);
+                                           status = 1;
+                                           break;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    /*System.out.println("\n" );
+                    if(status == 1){
+                        System.out.println("training jump was booked" );
+                    }else{
+                        System.out.println("couldnt book training jump");
+                    }    */                                                                                                                           
                 break;
+
+
+
 
                 case "fun":
                     JSONArray jArray =  json.getJSONArray("skydivers"); 
@@ -147,20 +186,57 @@ public class SkydiveBookingSystem {
                     for (int i=0;i<jArray.length();i++){        
                         listdata.add(jArray.getString(i));
                     }
-                    //do all checks and shit
-                    //set endtime
-                    //set dropzone
-                    FunJump jumpZ = new FunJump(type, starttimeJ,dropzoneJ);
-                    
-                    for(String jumperW : listdata){
-                        jumpZ.addJumper(jumperW);
+                    ArrayList<Skydiver> funJumperArray = new ArrayList<Skydiver>();     
+                    for(String diverName: listdata ){                         
+                        for(Skydiver diverObject : skydivers){
+                            if(diverName.equals(diverObject.name)){
+                                funJumperArray.add(diverObject);
+                                System.out.println(diverObject.name + " has a first avaliable time of: " + diverObject.earliestJumptime.toString() );
+                            } 
+                        }       
                     }
-                    //flights.get(0).addJump(jumpZ);
+                    //now we have a ArrayList of the Skydivers called "funJumperArray"
+                    //now i think we would run through each one in thingi and check if they can jump, iff all can, make the jump and add all individuall 
+                    int funs_booked = 0;
+                    for(Flight flight : flights){
+                            int all_jumpers_can_jump_check = 0;
+                            if( (flight.maxload - flight.peopleOnboard >= funJumperArray.size()) && (flight.starttime.isAfter(starttimeJ) || flight.starttime.isEqual(starttimeJ)) && (flight.starttime.getDayOfMonth() == starttimeJ.getDayOfMonth()) && funs_booked == 0){ // gota make sure the flight can take all of them
+                                //so we look at this flight which is the right time
+                                //run through the people to check if they can make it gona have int that counts how many people can do it. if it equals size, we book
+                                for(Skydiver jumper : funJumperArray){
+                                    all_jumpers_can_jump_check += jumper.checkAvaliable(jumper,flight);
+                                }
+                                if(all_jumpers_can_jump_check == funJumperArray.size()){
+                                    //this means we can book them all
+                                    FunJump jumpZ = new FunJump(type, starttimeJ, flight.endtime, flight.dropzone);
+                                    for(Skydiver jumper : funJumperArray){
+                                        jumpZ.addJumper(jumper);
+                                        jumper.skydiverJumpsList.add(jumpZ);
+                                    }
+                                    flight.addJump(jumpZ, funJumperArray.size());
+                                    jumps.add(jumpZ);
+                                    funs_booked = 1;
+                                }
+                            }
+                    }
+                    
+                    if(funs_booked == 1){
+                        System.out.println("fun jump was booked" );
+                    }else{
+                        System.out.println("couldnt book fun jump");
+                    }    
+                    
+                    
+                    
                 break;
             }
             
-            break;    
+            break;  
+            
         }
+        /*for(Skydiver diver : skydivers){
+            System.out.println("the size of " + diver.name +  " is  " + diver.skydiverJumpsList.size());  
+        }*/
     }
 
  

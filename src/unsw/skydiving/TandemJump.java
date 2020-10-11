@@ -13,6 +13,7 @@ public class TandemJump extends Jump{
     this.desination = desination;
     this.MasterName = MasterName;
     this.passengerName =  passengerName;
+    updateSkydiverAvaliability(MasterName, passengerName);
     }
 
     public void updateSkydiverAvaliability(Skydiver Master, Skydiver passenger){
