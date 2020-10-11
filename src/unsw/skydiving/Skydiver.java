@@ -55,17 +55,11 @@ public class Skydiver {
         
     }
 
-    public int checkAvaliable(Skydiver jumper, Flight flight){  // this check is for the funjumpers
-        int avaliable = 1;
-        //we wana check start time
-        if((jumper.earliestJumptime.isAfter(flight.starttime))){return 0;}
-        if(jumper.level < 2){return 0;}
-        return avaliable;
-    }
+    
 
-    public boolean checkjumpTimeAvaliable(Skydiver jumper, Flight flight, LocalDateTime starttime){  // you still have to check if licence is good enough
+    public boolean checkjumpTimeAvaliable(Skydiver jumper, Flight flight, LocalDateTime starttime, int preptime, int posttime){  // you still have to check if licence is good enough
         //this will run through all the jumpers jumps and check if this starttime is before (flight start - whatever) or after
-        if(starttime.isAfter(flight.starttime)){return false;}
+        if(starttime.plusMinutes(preptime).isAfter(flight.starttime)){return false;}
         
         //we are here because we know the startime they have put is before the flight start so we are g
         //now we gota check if they have a (flight earlier than + unpack/debreif )it that ends after the flight.starttime
@@ -74,14 +68,49 @@ public class Skydiver {
         }
         for(Jump jump : jumper.skydiverJumpsList){
             //we in here cos know they have a jump, we runthrough jumps now, 
+            //need to find out what the jump offset is
+            //possible offsets are:
+                        //needs to repack parashute after +10 : (everyone exept passenger in tandem)
+                        //tandem, need +5 before (everyone)
+                        //training need +15 after for debreif (after)
+            
+            int postoffset = 0;
+            
+            switch(jump.type){
+                case "tandem":
+                    if(jump instanceof TandemJump){
+                        TandemJump a = (TandemJump) jump;
+                        if(a.MasterName == jumper){      // we seeing if he the master and have to repack shoot. should be same object so can == instead of .equals
+                            postoffset = 10;
+                        }
+                        
+                    } 
+                break;
+
+                case "training":
+                    postoffset = 25; // 15 debrief plush both repack
+                break;
+
+                case "fun":
+                    postoffset = 10;
+                break;
+
+            }
+                        
+            if(starttime.isBefore(jump.starttime) && flight.endtime.plusMinutes(posttime).isBefore(jump.starttime)){
+                continue; // the flight is clear of this jump
+            }
+            if(starttime.isAfter(jump.endtime.plusMinutes(postoffset))){
+                continue; // the flight is clear of this jump
+            }
+            //if we here it means the flight isnt clear of one of tre jump runs so return false
+            return false;
         }
+        //if we get here and out of the for loop there is no interfering flight so can return true
         
         
         
-        
-        
-        
-        return false;
+        return true;
     }
 
 }

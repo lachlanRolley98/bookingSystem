@@ -97,36 +97,39 @@ public class SkydiveBookingSystem {
                             for(Flight flight: flights){                                                              
                                 //we gota find a flight whoes starttime is 5mims after starttimeJ(the persons arival time)
                                 if((flight.starttime.isAfter(starttimeJ.plusMinutes(5)) || flight.starttime.isEqual(starttimeJ.plusMinutes(5))) && (flight.starttime.getDayOfMonth() == starttimeJ.getDayOfMonth()) && (flight.maxload - flight.peopleOnboard >= 2) && status != 1){ // this is like >=
-                                    //aight we found a flight so gota try find a Jump master that fits
-                                    for(Skydiver diver2 : skydivers){                                  
-                                       if(((flight.starttime.isAfter(diver2.earliestJumptime.plusMinutes(5))) || (flight.starttime.isEqual(diver2.earliestJumptime.plusMinutes(5)))) && diver2.level == 4 && diver2.dropzone.equals(flight.dropzone) && status != 1 && !diver2.equals(Tandempassenger)) {
-                                           //we got a match baby book em in
-                                           MasterName = diver2;
-                                           //when we book the jump, also have to update the peoples info 
-                                           TandemJump jumpX = new TandemJump(type, starttimeJ, flight.endtime, flight.dropzone, MasterName, Tandempassenger);
-                                            //System.out.println(MasterName.name + " has a first avaliable time of: " + MasterName.earliestJumptime.toString() );
-                                            //System.out.println(Tandempassenger.name + " has a first avaliable time of: " + Tandempassenger.earliestJumptime.toString() );
+                                    if(Tandempassenger.checkjumpTimeAvaliable(Tandempassenger, flight, starttimeJ, 5, 0)){
+                                        //aight we found a flight so gota try find a Jump master that fits
+                                        for(Skydiver diver2 : skydivers){                                  
+                                            //checkjumpTimeAvaliable(Skydiver jumper, Flight flight, LocalDateTime starttime, int preptime, int posttime)
+                                            if(diver2.checkjumpTimeAvaliable(diver2, flight, starttimeJ, 5, 10) && diver2.level == 4 && diver2.dropzone.equals(flight.dropzone) && status != 1 && !diver2.equals(Tandempassenger)) {
+                                            //we got a match baby book em in
+                                            MasterName = diver2;
+                                            //when we book the jump, also have to update the peoples info 
+                                            TandemJump jumpX = new TandemJump(type, starttimeJ, flight.endtime, flight.dropzone, MasterName, Tandempassenger);
+                                                //System.out.println(MasterName.name + " has a first avaliable time of: " + MasterName.earliestJumptime.toString() );
+                                                //System.out.println(Tandempassenger.name + " has a first avaliable time of: " + Tandempassenger.earliestJumptime.toString() );
 
-                                           
-                                           jumps.add(jumpX);
-                                           flight.addJump(jumpX);
-                                           diver2.skydiverJumpsList.add(jumpX);
-                                           Tandempassenger.skydiverJumpsList.add(jumpX);
-                                           status = 1;
-                                           break;
-                                       }
+                                            
+                                            jumps.add(jumpX);
+                                            flight.addJump(jumpX);
+                                            diver2.skydiverJumpsList.add(jumpX);
+                                            Tandempassenger.skydiverJumpsList.add(jumpX);
+                                            status = 1;
+                                            break;
+                                            }
+                                        }
                                     }
                                 }
                             }
                             break;
                         }
                     }
-                    /*System.out.println("\n" );
+                    System.out.println("\n" );
                     if(status == 1){
                         System.out.println("tandem jump was booked" );
                     }else{
                         System.out.println("couldnt book tandem jump");
-                    }*/
+                    }
                     
                     
                 break;
@@ -148,20 +151,22 @@ public class SkydiveBookingSystem {
                                 //we gota find a flight whoes starttime is 5mims after starttimeJ(the persons arival time)
                                 if((flight.starttime.isAfter(starttimeJ) || flight.starttime.isEqual(starttimeJ)) && (flight.starttime.getDayOfMonth() == starttimeJ.getDayOfMonth()) && (flight.maxload - flight.peopleOnboard >= 2) && status != 1){ // this is like >=
                                     //aight we found a flight so gota try find a Jump master that fits
-                                    for(Skydiver diver2 : skydivers){         
-                                        //System.out.print("diver2.dropzone is :" + diver2.dropzone +"flight.dropzone is " + flight.dropzone);                         
-                                        if(((flight.starttime.isAfter(diver2.earliestJumptime) || (flight.starttime.isEqual(diver2.earliestJumptime))) && diver2.level >= 3 && diver2.dropzone.equals(flight.dropzone) && status != 1) && !diver2.equals(trainee)) {
-                                           //we got a match baby book em in
-                                           InstructorName = diver2;
-                                           //when we book the jump, also have to update the peoples info 
-                                           TrainingJump jumpY = new TrainingJump(type, starttimeJ, flight.endtime, flight.dropzone , InstructorName, trainee);
-
-                                           jumps.add(jumpY);
-                                           flight.addJump(jumpY);
-                                           diver2.skydiverJumpsList.add(jumpY);
-                                           trainee.skydiverJumpsList.add(jumpY);
-                                           status = 1;
-                                           break;
+                                    if(trainee.checkjumpTimeAvaliable(trainee, flight, starttimeJ, 0, 25)){
+                                        for(Skydiver diver2 : skydivers){         
+                                            //System.out.print("diver2.dropzone is :" + diver2.dropzone +"flight.dropzone is " + flight.dropzone);                         
+                                            if(diver2.checkjumpTimeAvaliable(diver2, flight, starttimeJ, 0, 25) && diver2.level >= 3 && diver2.dropzone.equals(flight.dropzone) && status != 1 && !diver2.equals(trainee)) {
+                                               //we got a match baby book em in
+                                               InstructorName = diver2;
+                                               //when we book the jump, also have to update the peoples info 
+                                               TrainingJump jumpY = new TrainingJump(type, starttimeJ, flight.endtime, flight.dropzone , InstructorName, trainee);
+    
+                                               jumps.add(jumpY);
+                                               flight.addJump(jumpY);
+                                               diver2.skydiverJumpsList.add(jumpY);
+                                               trainee.skydiverJumpsList.add(jumpY);
+                                               status = 1;
+                                               break;
+                                            }
                                         }
                                     }
                                 }
@@ -169,12 +174,12 @@ public class SkydiveBookingSystem {
                             break;
                         }
                     }
-                    /*System.out.println("\n" );
+                    System.out.println("\n" );
                     if(status == 1){
                         System.out.println("training jump was booked" );
                     }else{
                         System.out.println("couldnt book training jump");
-                    }    */                                                                                                                           
+                    }                                                                                                                              
                 break;
 
 
@@ -191,7 +196,7 @@ public class SkydiveBookingSystem {
                         for(Skydiver diverObject : skydivers){
                             if(diverName.equals(diverObject.name)){
                                 funJumperArray.add(diverObject);
-                                System.out.println(diverObject.name + " has a first avaliable time of: " + diverObject.earliestJumptime.toString() );
+                                //System.out.println(diverObject.name + " has a first avaliable time of: " + diverObject.earliestJumptime.toString() );
                             } 
                         }       
                     }
@@ -204,7 +209,9 @@ public class SkydiveBookingSystem {
                                 //so we look at this flight which is the right time
                                 //run through the people to check if they can make it gona have int that counts how many people can do it. if it equals size, we book
                                 for(Skydiver jumper : funJumperArray){
-                                    all_jumpers_can_jump_check += jumper.checkAvaliable(jumper,flight);
+                                    if(jumper.checkjumpTimeAvaliable(jumper, flight, starttimeJ, 0, 10)){
+                                        all_jumpers_can_jump_check ++;
+                                    }
                                 }
                                 if(all_jumpers_can_jump_check == funJumperArray.size()){
                                     //this means we can book them all
