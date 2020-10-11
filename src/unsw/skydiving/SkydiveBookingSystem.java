@@ -78,19 +78,57 @@ public class SkydiveBookingSystem {
             LocalDateTime starttimeJ = LocalDateTime.parse(json.getString("starttime"));
             String dropzoneJ = "No dropzone yet";  
             //note endtime is created at the end only if we can make it and link it too a flight
+            int status = 0;
             switch(type){
+                
                 case "tandem":
                     String passengerName = json.getString("passenger");
-                    String MasterName = "Master not found yet";
+                    Skydiver MasterName ;
                     // Here is where we would make all the checks and find masters and shit
                     //we only use these names to find the skydiver ovject it relates to, then we add the skydiver object, not the string
                     //do like a if good to go make it, 
                     //we just making it now for fun
-                    TandemJump jumpX = new TandemJump(type, starttimeJ, dropzoneJ, MasterName, passengerName);
-                    //set endtime we can also make the endtime and dropzone first then add them into the constructor
-                    //set dropzone
-                    jumps.add(jumpX);
+                    //check if person can jump
+                    
+                    Skydiver Tandempassenger;
+                    for(Skydiver diver: skydivers){    // this is really bad style im guessing, fix if can be fucked later                       
+                        if(diver.name.equals(passengerName) && status != 1 ){
+                            Tandempassenger = diver;
+                            for(Flight flight: flights){                                                              
+                                //we gota find a flight whoes starttime is 5mims after starttimeJ(the persons arival time)
+                                if((flight.starttime.isAfter(starttimeJ.plusMinutes(5)) || flight.starttime.isEqual(starttimeJ.plusMinutes(5))) && (flight.starttime.getDayOfMonth() == starttimeJ.getDayOfMonth()) && (flight.maxload - flight.peopleOnboard >= 2) && status != 1){ // this is like >=
+                                    //aight we found a flight so gota try find a Jump master that fits
+                                    for(Skydiver diver2 : skydivers){                                  
+                                       if((flight.starttime.isAfter(diver2.earliestJumptime.plusMinutes(5))) || (flight.starttime.isEqual(diver2.earliestJumptime)) && diver2.level == 4 && diver2.dropzone.equals(flight.dropzone) && status != 1) {
+                                           //we got a match baby book em in
+                                           MasterName = diver2;
+                                           //when we book the jump, also have to update the peoples info 
+                                           TandemJump jumpX = new TandemJump(type, starttimeJ, flight.endtime, dropzoneJ, MasterName, Tandempassenger);
+                                           jumps.add(jumpX);
+                                           flight.addJump(jumpX);
+                                           status = 1;
+                                           break;
+                                       }
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    if(status == 1){
+                        System.out.println("jump was booked");
+                    }else{
+                        System.out.println("couldnt book");
+                    }
+                    
+                    
                 break;
+
+
+
+
+
+
                 case "training":
                     String traineeName = json.getString("trainee");
                     String InstructorName = "Master not found yet";
@@ -99,7 +137,7 @@ public class SkydiveBookingSystem {
                     TrainingJump jumpY = new TrainingJump(type, starttimeJ, dropzoneJ , InstructorName, traineeName);
                     //set endtime
                     //set dropzone
-
+                    //flights.get(0).addJump(jumpY);
                     jumps.add(jumpY);
                 break;
 
@@ -117,14 +155,11 @@ public class SkydiveBookingSystem {
                     for(String jumperW : listdata){
                         jumpZ.addJumper(jumperW);
                     }
+                    //flights.get(0).addJump(jumpZ);
                 break;
             }
             
-
             break;    
-
-        // TODO Implement other commands
-        
         }
     }
 
@@ -132,8 +167,6 @@ public class SkydiveBookingSystem {
     //are we allowed to move main out of this class ?? does that fuck things up ??
     public static void main(String[] args) {
         SkydiveBookingSystem system = new SkydiveBookingSystem();
-
-        
 
         Scanner sc = new Scanner(System.in);
 

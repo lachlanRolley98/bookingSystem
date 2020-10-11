@@ -3,15 +3,21 @@ import java.time.LocalDateTime;
 
 
 public class TandemJump extends Jump{
-    public String MasterName; // this will be changed the skydiver object
-    public String passengerName; // this will be changed the skydiver object
+    public Skydiver MasterName; // this will be changed the skydiver object
+    public Skydiver passengerName; // this will be changed the skydiver object
 
-    public TandemJump(String type, LocalDateTime starttime, String desination , String MasterName, String passengerName){
+    public TandemJump(String type, LocalDateTime starttime, LocalDateTime endtime,String desination , Skydiver MasterName, Skydiver passengerName){
     this.type = type;
     this.starttime = starttime; 
+    this.endtime = endtime;
     this.desination = desination;
     this.MasterName = MasterName;
     this.passengerName =  passengerName;
+    }
+
+    public void updateSkydiverAvaliability(Skydiver Master, Skydiver passenger){
+        Master.earliestJumptime = endtime.plusMinutes(10); // he gota repack, the passenger doesnt
+        passenger.earliestJumptime = endtime;
     }
     
 }
