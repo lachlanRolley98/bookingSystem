@@ -32,13 +32,13 @@ public class SkydiveBookingSystem {
     ArrayList<Flight> flights ; // care this starts at 0 so flight1 == 0
     ArrayList<Skydiver> skydivers ;
     ArrayList<Jump> jumps ;
-    JSONArray jsonArray;
+    
 
     public SkydiveBookingSystem() {
         this.flights = new ArrayList<Flight>();
         this.skydivers = new ArrayList<Skydiver>();
         this.jumps = new ArrayList<Jump>();
-        this.jsonArray = new JSONArray();
+       
     }
 
     //aight so a single booking system gets made so in here we can hold an array of all the flights and shit
@@ -128,7 +128,8 @@ public class SkydiveBookingSystem {
                                             jsonObject.put("flight", flight.id);
                                             jsonObject.put("dropzone", jumpX.desination);
                                             jsonObject.put("status", "success");
-                                            jsonArray.put(jsonObject);
+                                            System.out.println(jsonObject.toString(2));
+                                            
                                                 
                                             break;
                                             }
@@ -139,15 +140,15 @@ public class SkydiveBookingSystem {
                             break;
                         }
                     }
-                    System.out.println("\n" );
+                    //System.out.println("\n" );
                     if(status == 1){
-                        System.out.println("tandem jump was booked" );
+                     //   System.out.println("tandem jump was booked" );
                     }else{
-                        System.out.println("couldnt book tandem jump");
+                       // System.out.println("couldnt book tandem jump");
                         
                         JSONObject jsonObject = new JSONObject();
                         jsonObject.put("status", "rejected");
-                        jsonArray.put(jsonObject);
+                        System.out.println(jsonObject.toString(2));
                     }
                     
                     
@@ -189,7 +190,7 @@ public class SkydiveBookingSystem {
                                                 jsonObject.put("flight", flight.id);
                                                 jsonObject.put("dropzone", jumpY.desination);
                                                 jsonObject.put("status", "success");
-                                                jsonArray.put(jsonObject);
+                                                System.out.println(jsonObject.toString(2));
                                                break;
                                             }
                                         }
@@ -199,14 +200,14 @@ public class SkydiveBookingSystem {
                             break;
                         }
                     }
-                    System.out.println("\n" );
+                    //System.out.println("\n" );
                     if(status == 1){
-                        System.out.println("training jump was booked" );
+                    //    System.out.println("training jump was booked" );
                     }else{
-                        System.out.println("couldnt book training jump");
+                    //    System.out.println("couldnt book training jump");
                         JSONObject jsonObject = new JSONObject();
                         jsonObject.put("status", "rejected");
-                        jsonArray.put(jsonObject);
+                        System.out.println(jsonObject.toString(2));
                     }                                                                                                                              
                 break;
 
@@ -254,7 +255,7 @@ public class SkydiveBookingSystem {
                                     jsonObject.put("flight", flight.id);
                                     jsonObject.put("dropzone", jumpZ.desination);
                                     jsonObject.put("status", "success");
-                                    jsonArray.put(jsonObject);
+                                    System.out.println(jsonObject.toString(2));
                                     funs_booked = 1;
                                     break;
                                 }
@@ -262,12 +263,12 @@ public class SkydiveBookingSystem {
                     }
                     
                     if(funs_booked == 1){
-                        System.out.println("fun jump was booked" );
+                       // System.out.println("fun jump was booked" );
                     }else{
-                        System.out.println("couldnt book fun jump");
+                     //   System.out.println("couldnt book fun jump");
                         JSONObject jsonObject = new JSONObject();
                         jsonObject.put("status", "rejected");
-                        jsonArray.put(jsonObject);
+                        System.out.println(jsonObject.toString(2));
                     }    
                     
                     
@@ -406,7 +407,7 @@ public class SkydiveBookingSystem {
                                             jsonObject.put("flight", flight.id);
                                             jsonObject.put("dropzone", jumpX.desination);
                                             jsonObject.put("status", "success");
-                                            jsonArray.put(jsonObject);
+                                            System.out.println(jsonObject.toString(2));
 
                                             break;
                                             }
@@ -417,14 +418,14 @@ public class SkydiveBookingSystem {
                             break;
                         }
                     }
-                    System.out.println("\n" );
+                   // System.out.println("\n" );
                     if(statusC == 1){
-                        System.out.println("change was was booked" );
+                      //  System.out.println("change was was booked" );
                     }else{
-                        System.out.println("couldnt change jump");
+                      //  System.out.println("couldnt change jump");
                         JSONObject jsonObject = new JSONObject();
                         jsonObject.put("status", "rejected");
-                        jsonArray.put(jsonObject);
+                        System.out.println(jsonObject.toString(2));
                     }
                     
                     
@@ -461,7 +462,7 @@ public class SkydiveBookingSystem {
                                             jsonObject.put("flight", flight.id);
                                             jsonObject.put("dropzone", jumpY.desination);
                                             jsonObject.put("status", "success");
-                                            jsonArray.put(jsonObject);
+                                            System.out.println(jsonObject.toString(2));
 
                                            break;
                                         }
@@ -472,14 +473,14 @@ public class SkydiveBookingSystem {
                         break;
                     }
                 }
-                System.out.println("\n" );
+              //  System.out.println("\n" );
                 if(statusC == 1){
-                    System.out.println("Change was booked" );
+               //     System.out.println("Change was booked" );
                 }else{
-                    System.out.println("Couldnt Change jump");
+               //     System.out.println("Couldnt Change jump");
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("status", "rejected");
-                    jsonArray.put(jsonObject);
+                    System.out.println(jsonObject.toString(2));
                 }                                                                                                                              
             break;
            
@@ -526,19 +527,19 @@ public class SkydiveBookingSystem {
                                 jsonObject.put("flight", flight.id);
                                 jsonObject.put("dropzone", jumpZ.desination);
                                 jsonObject.put("status", "success");
-                                jsonArray.put(jsonObject);
+                                System.out.println(jsonObject.toString(2));
                                 break;
                             }
                         }
                 }
                 
                 if(funs_booked == 1){
-                    System.out.println("Change was booked" );
+                //    System.out.println("Change was booked" );
                 }else{
-                    System.out.println("couldnt change jump");
+                //    System.out.println("couldnt change jump");
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("status", "rejected");
-                    jsonArray.put(jsonObject);
+                    System.out.println(jsonObject.toString(2));
                 }    
                 
                 break;
@@ -548,6 +549,62 @@ public class SkydiveBookingSystem {
             }//this for the switch statement inside change
 
             break;//this break is for the change case
+
+        case "jump-run":
+            String jumpRun = json.getString("id");
+            //JSONArray jsonJumpRunArray = new JSONArray(); // just gona keep making new ones for each jump run
+            System.out.print("[");
+            for(Flight flight : flights){
+                if(flight.id.equals(jumpRun)){
+                    //we in here cos we got the flight we are requesting to see, gota make a single JSONObject of all the jumps in it and format it right
+                    
+                    // STEP 1 - SORT THE THE ORDER OF THE FLIGHTS - Thinking make a new array and put them into it in right order then use that array
+                    //ArrayList <Jump> orderedFlightRunArray = new ArrayList<Jump>();
+                    //orderedFlightRunArray = flight.orderJumpTime;
+                    // STEP 2 - MAKE AN OBJECT FOR EACH JUMP ON THE ARRAY - DIFFERENT JUMP TYPES HAVE DIFFERENT FORMATTING. CAREFULL // this gota be done in function
+                    //print it out in the right format once its made, idk how to add fun array to to array so just do individually
+                    for(Jump jump: flight.jumpsInFlight){
+                        //ok we gota make an object for this jump, each jumptype has a different format
+                        if(jump.type.equals("fun")){
+                            FunJump thisJump = (FunJump) jump;
+                            if(thisJump.jumpers.size() != 0){
+                                //System.out.println("the amount of jumpers in this should be: "+ thisJump.jumpers.size());
+                                System.out.print("{\"skydivers\""+": [");
+                                for(Skydiver diver : thisJump.jumpers){
+                                    System.out.println("\"" + diver.name + "\"" + ",");
+                                    //jsonObject.put("skydivers", diver.name);
+                                }
+                                System.out.print("]}");
+
+                            }    
+                        }
+                        if(jump.type.equals("tandem")){
+                            JSONObject jsonObject = new JSONObject();
+                            TandemJump thisJump = (TandemJump) jump;
+                            jsonObject.put("passenger", thisJump.passengerName.name);
+                            jsonObject.put("jump-master", thisJump.MasterName.name);
+                            System.out.println(jsonObject.toString(2));
+                        }   
+                        if(jump.type.equals("training")){
+                            JSONObject jsonObject = new JSONObject();
+                            TrainingJump thisJump = (TrainingJump) jump;
+                            jsonObject.put("trainee", thisJump.traineeName.name);
+                            jsonObject.put("instructor", thisJump.InstructorName.name);
+                            System.out.println(jsonObject.toString(2));
+                        }   
+                    }    
+                    // STEP 3 - PRINT AN ARRAYLIST INSTEAD OF OBJECT 
+                    //printJsonArray(jsonJumpRunArray);
+                    System.out.println("]");
+                    break; 
+                }
+            }
+            
+            break;
+        
+            
+
+
         //this is the bracket for the big switch statment  
         //this is the bracket for the big switch statment    
         }
@@ -557,9 +614,12 @@ public class SkydiveBookingSystem {
     }
 
     public static void printJsonArray(JSONArray jsonArray){
+        
         for(int i = 0; i < jsonArray.length() ; i++){ // normal ArrayList itteration isnt working :/
             System.out.println(jsonArray.getJSONObject(i).toString(2));
         }
+        
+
 
     }
     //are we allowed to move main out of this class ?? does that fuck things up ??
@@ -580,8 +640,8 @@ public class SkydiveBookingSystem {
         }
         //here, i think i can print out the json array
         //cant be returning shit dirrectly from here thou cos static, make a function that returns all then call it here.
-        System.out.println("waawawoowwe");
-        printJsonArray(system.jsonArray);
+        //System.out.println("waawawoowwe");
+        //printJsonArray(system.jsonArray);
         
         sc.close();
         } catch (FileNotFoundException e){

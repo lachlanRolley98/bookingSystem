@@ -38,6 +38,17 @@ public class Flight {
         jumpsInFlight.add(jump);
         peopleOnboard = peopleOnboard + size;
     }
-	
+
+    public ArrayList <Jump> orderJumpTime(){
+        ArrayList <Jump> orderedFlightRunArray = new ArrayList<Jump>();
+        //we are just making a copy that we discard each time, doesnt actaully change the jumps in the Flights array
+        for(Jump jump : jumpsInFlight){
+            //now we gota add these in the right order somehow, currently the jump booked first is at the front ->then goes next next yadayada
+            //first is fun-jump groups, and this goes biggest to smallest
+        }
+
+
+        return orderedFlightRunArray; 
+    }
 	
 }
