@@ -276,7 +276,7 @@ public class SkydiveBookingSystem {
             //aight so got the jump, can legit just remove it from the arrayLists
             break;
         
-        case "changeNOO":
+        case "change":
             //change is basically like, if we delete it then take this as a request, can we do it ?, if not be like nah,
             // ima just make a copy of the jump, delete it, try and add new one
             // if can add, yew, if not, readd old one (no reason why cant add old one back right ?)
@@ -323,38 +323,165 @@ public class SkydiveBookingSystem {
 
             // STEP3, TRY AND MAKE NEW JUMP !
 
+            String typeC = json.getString("type");
+            String J_idC = json.getString("id");
+            LocalDateTime starttimeJC = LocalDateTime.parse(json.getString("starttime"));
+            String dropzoneJC = "No dropzone yet";  
+            //note endtime is created at the end only if we can make it and link it too a flight
+            int statusC = 0;
+            switch(typeC){
+                
+                case "tandem":
+                    String passengerName = json.getString("passenger");
+                    Skydiver MasterName ;
+                    // Here is where we would make all the checks and find masters and shit
+                    //we only use these names to find the skydiver ovject it relates to, then we add the skydiver object, not the string
+                    //do like a if good to go make it, 
+                    //we just making it now for fun
+                    //check if person can jump
+                    
+                    Skydiver Tandempassenger;          //put all this method in tandem later
+                    for(Skydiver diver: skydivers){    // this is really bad style im guessing, fix if can be fucked later                       
+                        if(diver.name.equals(passengerName) && statusC != 1 ){
+                            Tandempassenger = diver;
+                            for(Flight flight: flights){                                                              
+                                //we gota find a flight whoes starttime is 5mims after starttimeJ(the persons arival time)
+                                if((flight.starttime.isAfter(starttimeJC.plusMinutes(5)) || flight.starttime.isEqual(starttimeJC.plusMinutes(5))) && (flight.starttime.getDayOfMonth() == starttimeJC.getDayOfMonth()) && (flight.maxload - flight.peopleOnboard >= 2) && statusC != 1){ // this is like >=
+                                    if(Tandempassenger.checkjumpTimeAvaliable(Tandempassenger, flight, starttimeJC, 5, 0)){
+                                        //aight we found a flight so gota try find a Jump master that fits
+                                        for(Skydiver diver2 : skydivers){                                  
+                                            //checkjumpTimeAvaliable(Skydiver jumper, Flight flight, LocalDateTime starttime, int preptime, int posttime)
+                                            if(diver2.checkjumpTimeAvaliable(diver2, flight, starttimeJC, 5, 10) && diver2.level == 4 && diver2.dropzone.equals(flight.dropzone) && statusC != 1 && !diver2.equals(Tandempassenger)) {
+                                            //we got a match baby book em in
+                                            MasterName = diver2;
+                                            //when we book the jump, also have to update the peoples info 
+                                            TandemJump jumpX = new TandemJump(typeC, starttimeJC, flight.endtime, flight.dropzone, MasterName, Tandempassenger, J_idC);
+                                                //System.out.println(MasterName.name + " has a first avaliable time of: " + MasterName.earliestJumptime.toString() );
+                                                //System.out.println(Tandempassenger.name + " has a first avaliable time of: " + Tandempassenger.earliestJumptime.toString() );
 
+                                            
+                                            jumps.add(jumpX);
+                                            flight.addJump(jumpX);
+                                            diver2.skydiverJumpsList.add(jumpX);
+                                            Tandempassenger.skydiverJumpsList.add(jumpX);
+                                            status = 1;
+                                            break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    System.out.println("\n" );
+                    if(statusC == 1){
+                        System.out.println("change was was booked" );
+                    }else{
+                        System.out.println("couldnt change jump");
+                    }
+                    
+                    
+                break;
 
+                case "training":
+                String traineeName = json.getString("trainee");
+                Skydiver InstructorName ;
+                
+                Skydiver trainee;          //put all this method in tandem later
+                for(Skydiver diver: skydivers){    // this is really bad style im guessing, fix if can be fucked later                       
+                    if(diver.name.equals(traineeName) && statusC != 1 ){
+                        trainee = diver;
+                        for(Flight flight: flights){                                                              
+                            //we gota find a flight whoes starttime is 5mims after starttimeJ(the persons arival time)
+                            if((flight.starttime.isAfter(starttimeJC) || flight.starttime.isEqual(starttimeJC)) && (flight.starttime.getDayOfMonth() == starttimeJC.getDayOfMonth()) && (flight.maxload - flight.peopleOnboard >= 2) && statusC != 1){ // this is like >=
+                                //aight we found a flight so gota try find a Jump master that fits
+                                if(trainee.checkjumpTimeAvaliable(trainee, flight, starttimeJC, 0, 25)){
+                                    for(Skydiver diver2 : skydivers){         
+                                        //System.out.print("diver2.dropzone is :" + diver2.dropzone +"flight.dropzone is " + flight.dropzone);                         
+                                        if(diver2.checkjumpTimeAvaliable(diver2, flight, starttimeJC, 0, 25) && diver2.level >= 3 && diver2.dropzone.equals(flight.dropzone) && statusC != 1 && !diver2.equals(trainee)) {
+                                           //we got a match baby book em in
+                                           InstructorName = diver2;
+                                           //when we book the jump, also have to update the peoples info 
+                                           TrainingJump jumpY = new TrainingJump(typeC, starttimeJC, flight.endtime, flight.dropzone , InstructorName, trainee, J_idC);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                                           jumps.add(jumpY);
+                                           flight.addJump(jumpY);
+                                           diver2.skydiverJumpsList.add(jumpY);
+                                           trainee.skydiverJumpsList.add(jumpY);
+                                           status = 1;
+                                           break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+                System.out.println("\n" );
+                if(statusC == 1){
+                    System.out.println("Change was booked" );
+                }else{
+                    System.out.println("Couldnt Change jump");
+                }                                                                                                                              
             break;
+           
+                case "fun":
+                JSONArray jArray =  json.getJSONArray("skydivers"); 
+                ArrayList<String> listdata = new ArrayList<String>();     
+                for (int i=0;i<jArray.length();i++){        
+                    listdata.add(jArray.getString(i));
+                }
+                ArrayList<Skydiver> funJumperArray = new ArrayList<Skydiver>();     
+                for(String diverName: listdata ){                         
+                    for(Skydiver diverObject : skydivers){
+                        if(diverName.equals(diverObject.name)){
+                            funJumperArray.add(diverObject);
+                            //System.out.println(diverObject.name + " has a first avaliable time of: " + diverObject.earliestJumptime.toString() );
+                        } 
+                    }       
+                }
+                //now we have a ArrayList of the Skydivers called "funJumperArray"
+                //now i think we would run through each one in thingi and check if they can jump, iff all can, make the jump and add all individuall 
+                int funs_booked = 0;
+                for(Flight flight : flights){
+                        int all_jumpers_can_jump_check = 0;
+                        if( (flight.maxload - flight.peopleOnboard >= funJumperArray.size()) && (flight.starttime.isAfter(starttimeJC) || flight.starttime.isEqual(starttimeJC)) && (flight.starttime.getDayOfMonth() == starttimeJC.getDayOfMonth()) && funs_booked == 0){ // gota make sure the flight can take all of them
+                            //so we look at this flight which is the right time
+                            //run through the people to check if they can make it gona have int that counts how many people can do it. if it equals size, we book
+                            for(Skydiver jumper : funJumperArray){
+                                if(jumper.checkjumpTimeAvaliable(jumper, flight, starttimeJC, 0, 10)){
+                                    all_jumpers_can_jump_check ++;
+                                }
+                            }
+                            if(all_jumpers_can_jump_check == funJumperArray.size()){
+                                //this means we can book them all
+                                FunJump jumpZ = new FunJump(typeC, starttimeJC, flight.endtime, flight.dropzone, J_idC);
+                                for(Skydiver jumper : funJumperArray){
+                                    jumpZ.addJumper(jumper);
+                                    jumper.skydiverJumpsList.add(jumpZ);
+                                }
+                                flight.addJump(jumpZ, funJumperArray.size());
+                                jumps.add(jumpZ);
+                                funs_booked = 1;
+                            }
+                        }
+                }
+                
+                if(funs_booked == 1){
+                    System.out.println("Change was booked" );
+                }else{
+                    System.out.println("couldnt change jump");
+                }    
+                
+                break;
+
+
+            
+            }//this for the switch statement inside change
+
+            break;//this break is for the change case
         //this is the bracket for the big switch statment  
         //this is the bracket for the big switch statment    
         }
