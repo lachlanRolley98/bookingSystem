@@ -75,6 +75,7 @@ public class SkydiveBookingSystem {
             break;
         case "request":   // atm im just making jumps, doesnt actually check if u can do it uwu
             String type = json.getString("type");
+            String J_id = json.getString("id");
             LocalDateTime starttimeJ = LocalDateTime.parse(json.getString("starttime"));
             String dropzoneJ = "No dropzone yet";  
             //note endtime is created at the end only if we can make it and link it too a flight
@@ -105,7 +106,7 @@ public class SkydiveBookingSystem {
                                             //we got a match baby book em in
                                             MasterName = diver2;
                                             //when we book the jump, also have to update the peoples info 
-                                            TandemJump jumpX = new TandemJump(type, starttimeJ, flight.endtime, flight.dropzone, MasterName, Tandempassenger);
+                                            TandemJump jumpX = new TandemJump(type, starttimeJ, flight.endtime, flight.dropzone, MasterName, Tandempassenger, J_id);
                                                 //System.out.println(MasterName.name + " has a first avaliable time of: " + MasterName.earliestJumptime.toString() );
                                                 //System.out.println(Tandempassenger.name + " has a first avaliable time of: " + Tandempassenger.earliestJumptime.toString() );
 
@@ -158,7 +159,7 @@ public class SkydiveBookingSystem {
                                                //we got a match baby book em in
                                                InstructorName = diver2;
                                                //when we book the jump, also have to update the peoples info 
-                                               TrainingJump jumpY = new TrainingJump(type, starttimeJ, flight.endtime, flight.dropzone , InstructorName, trainee);
+                                               TrainingJump jumpY = new TrainingJump(type, starttimeJ, flight.endtime, flight.dropzone , InstructorName, trainee, J_id);
     
                                                jumps.add(jumpY);
                                                flight.addJump(jumpY);
@@ -215,7 +216,7 @@ public class SkydiveBookingSystem {
                                 }
                                 if(all_jumpers_can_jump_check == funJumperArray.size()){
                                     //this means we can book them all
-                                    FunJump jumpZ = new FunJump(type, starttimeJ, flight.endtime, flight.dropzone);
+                                    FunJump jumpZ = new FunJump(type, starttimeJ, flight.endtime, flight.dropzone, J_id);
                                     for(Skydiver jumper : funJumperArray){
                                         jumpZ.addJumper(jumper);
                                         jumper.skydiverJumpsList.add(jumpZ);
@@ -237,9 +238,125 @@ public class SkydiveBookingSystem {
                     
                 break;
             }
-            
             break;  
+        case "cancel":
+            //ok so we will have a request to cancel, should first check is valid flight probs then, cbs sheel be right
+            // all we get is an id, then we gota find the jump that corresponds too, that jump has people,
+            // the places we gota remove the jump from is the (flightArray above), (JumpsArray above) up there, (Skydivers_personal jumps array (This will auto change there avaliabity)) 
+            String Jump_id = json.getString("id");
+            //System.out.println("the size of jumps arrayList is: " + jumps.size());
             
+            for(Jump jump : jumps) {
+                if (jump.id.equals(Jump_id)){// ladies and gentleman, we got him
+                    jumps.remove(jump);
+                    break;
+                } 
+            }
+            for(Flight flight : flights){
+                for(Jump jump : flight.jumpsInFlight){
+                    if (jump.id.equals(Jump_id)){
+                        flight.jumpsInFlight.remove(jump);
+                        break;
+                    }    
+                }
+            }
+            for(Skydiver skydiver : skydivers){       // if we remove a jump from a skydiver, the way our check avaliabilty works uses current jumps so dont have to change anything else
+                for(Jump jump : skydiver.skydiverJumpsList){
+                    if (jump.id.equals(Jump_id)){
+                        skydiver.skydiverJumpsList.remove(jump);
+                        break;
+                    }
+                }
+            }
+            //start removing it from everything
+
+            //System.out.println("the size of jumps arrayList is: " + jumps.size());
+            
+            
+            //aight so got the jump, can legit just remove it from the arrayLists
+            break;
+        
+        case "changeNOO":
+            //change is basically like, if we delete it then take this as a request, can we do it ?, if not be like nah,
+            // ima just make a copy of the jump, delete it, try and add new one
+            // if can add, yew, if not, readd old one (no reason why cant add old one back right ?)
+            // Time to hardcode the shit out of this yew (put it all in respective classes if have time)
+
+            
+
+            //STEP 1 COPY JUMP 
+            String Jump_id2 = json.getString("id");
+            Jump jumpCopy;
+            int c = 0;
+            while(c < jumps.size()){
+                if (jumps.get(c).id.equals(Jump_id2)){break;} 
+                c++; 
+            }
+            jumpCopy = jumps.get(c);
+            
+            //STEP 2 DELETE THE JUMP IT
+
+            
+            
+            for(Jump jump : jumps) {
+                if (jump.id.equals(Jump_id2)){// ladies and gentleman, we got him  
+                    jumps.remove(jump);
+                    break;
+                } 
+            }
+            for(Flight flight : flights){
+                for(Jump jump : flight.jumpsInFlight){
+                    if (jump.id.equals(Jump_id2)){
+                        flight.jumpsInFlight.remove(jump);
+                        break;
+                    }    
+                }
+            }
+            for(Skydiver skydiver : skydivers){       // if we remove a jump from a skydiver, the way our check avaliabilty works uses current jumps so dont have to change anything else
+                for(Jump jump : skydiver.skydiverJumpsList){
+                    if (jump.id.equals(Jump_id2)){
+                        skydiver.skydiverJumpsList.remove(jump);
+                        break;
+                    }
+                }
+            }
+
+            // STEP3, TRY AND MAKE NEW JUMP !
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            break;
+        //this is the bracket for the big switch statment  
+        //this is the bracket for the big switch statment    
         }
         /*for(Skydiver diver : skydivers){
             System.out.println("the size of " + diver.name +  " is  " + diver.skydiverJumpsList.size());  

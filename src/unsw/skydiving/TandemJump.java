@@ -6,12 +6,13 @@ public class TandemJump extends Jump{
     public Skydiver MasterName; // this will be changed the skydiver object
     public Skydiver passengerName; // this will be changed the skydiver object
 
-    public TandemJump(String type, LocalDateTime starttime, LocalDateTime endtime,String desination , Skydiver MasterName, Skydiver passengerName){
+    public TandemJump(String type, LocalDateTime starttime, LocalDateTime endtime,String desination , Skydiver MasterName, Skydiver passengerName, String id){
     this.type = type;
     this.starttime = starttime; 
     this.endtime = endtime;
     this.desination = desination;
     this.MasterName = MasterName;
+    this.id = id;
     this.passengerName =  passengerName;
     updateSkydiverAvaliability(MasterName, passengerName);
     }
