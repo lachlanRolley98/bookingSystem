@@ -717,7 +717,7 @@ public class SkydiveBookingSystem {
 
         try{
         
-        File json = new File("src/unsw/skydiving/test3_in.json");
+        File json = new File("src/unsw/skydiving/s1.json");
         Scanner sc = new Scanner(json);
 
         while (sc.hasNextLine()) { // pre sure this just reads line by line and sends each line individually to system.processCommand
