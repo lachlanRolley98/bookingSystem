@@ -14,6 +14,7 @@ public class TandemJump extends Jump{
     this.MasterName = MasterName;
     this.id = id;
     this.passengerName =  passengerName;
+    this.jumpWeighting = 10;
     updateSkydiverAvaliability(MasterName, passengerName);
     }
 

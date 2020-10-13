@@ -14,6 +14,7 @@ public class TrainingJump extends Jump{
     this.InstructorName = InstructorName;
     this.traineeName =  traineeName;
     this.id = id;
+    this.jumpWeighting = 20;
     updateSkydiverAvaliability();
     }
 

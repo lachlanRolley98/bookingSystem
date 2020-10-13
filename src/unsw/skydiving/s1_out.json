@@ -38,24 +38,28 @@
   "status": "success"
 }
 []
-[{"skydivers": ["Matt",
-"Ashesh",
-"Borat",
-"Ted",
-"Apple Banana Coconut",
+[{"skydivers": ["Matt"
+,
+"Ashesh"
+,
+"Borat"
+,
+"Ted"
+,
+"Apple Banana Coconut"
 ]}]
 []
 []
 []
-[{
+[{"skydivers": ["Matt"
+]}{
   "passenger": "Alice in Wonderland",
   "jump-master": "Ashesh"
 }
-{"skydivers": ["Matt",
-]}]
+]
 []
 [{
-  "instructor": "Apple Banana Coconut",
+  "instructor": "Alice in Wonderland",
   "trainee": "Bruno"
 }
 ]

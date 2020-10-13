@@ -113,4 +113,16 @@ public class Skydiver {
         return true;
     }
 
+
+    public int jumpsOnDay(Flight flight){
+        int jumps_on_day = 0;
+        int day = flight.starttime.getDayOfYear();
+        for(Jump jump : skydiverJumpsList ){
+            if(jump.starttime.getDayOfYear() == day){
+                jumps_on_day++;
+            }
+        }
+        return jumps_on_day;
+    }
+
 }

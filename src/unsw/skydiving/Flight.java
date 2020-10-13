@@ -34,8 +34,11 @@ public class Flight {
         peopleOnboard = peopleOnboard + 2;
     }
 
-    public void addJump(Jump jump, int size){      // cos we have no idea how many people gona jump, gota add them individually, not in constructor
-        jumpsInFlight.add(jump);
+    public void addJump(Jump jumpToAdd, int size){      // cos we have no idea how many people gona jump, gota add them individually, not in constructor
+        //we can add the flight in the order it should be in i think
+        
+        
+        jumpsInFlight.add(jumpToAdd);
         peopleOnboard = peopleOnboard + size;
     }
 
@@ -43,12 +46,31 @@ public class Flight {
         ArrayList <Jump> orderedFlightRunArray = new ArrayList<Jump>();
         //we are just making a copy that we discard each time, doesnt actaully change the jumps in the Flights array
         for(Jump jump : jumpsInFlight){
-            //now we gota add these in the right order somehow, currently the jump booked first is at the front ->then goes next next yadayada
-            //first is fun-jump groups, and this goes biggest to smallest
+            if(orderedFlightRunArray.size() == 0){
+                orderedFlightRunArray.add(jump);
+            }else{
+                for(int x=0 ; x < orderedFlightRunArray.size() ; x++){
+                    if(jump.jumpWeighting > orderedFlightRunArray.get(x).jumpWeighting){
+                        orderedFlightRunArray.add(x,jump);
+                        break;
+                    }
+                }
+                if(!orderedFlightRunArray.contains(jump)){
+                    orderedFlightRunArray.add(jump);
+                }
+            }      
         }
+        
+            
+        
+        
+        //if its not added in the array
+        //if(!jumpsInFlight.contains(jumpToAdd)){jumpsInFlight.add(jumpToAdd);}
 
 
         return orderedFlightRunArray; 
     }
+
+
 	
 }

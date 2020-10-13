@@ -8,6 +8,7 @@ public class Jump {
     public LocalDateTime starttime; 
     public LocalDateTime endtime;
     public String desination;
+    public int jumpWeighting;
 
 
     //gota make contructor

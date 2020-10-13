@@ -114,12 +114,12 @@ public class SkydiveBookingSystem {
                                             //we got a match baby book em in
                                             MasterName = diver2;
                                             //now we can check if there are any other masters with less jumps on the day that take prio
-                                            int lowest_jumps_and_avaliable = diver2.skydiverJumpsList.size();
+                                            int lowest_jumps_and_avaliable = diver2.jumpsOnDay(flight);
                                             for(Skydiver diver3 : skydivers){
                                                 if(diver3.checkjumpTimeAvaliable(diver3, flight, starttimeJ, 5, 10) && diver3.level == 4 && diver3.dropzone.equals(flight.dropzone) && status != 1 && !diver3.equals(Tandempassenger)) {
-                                                    if(diver3.skydiverJumpsList.size() < lowest_jumps_and_avaliable){
+                                                    if(diver3.jumpsOnDay(flight) < lowest_jumps_and_avaliable){
                                                         MasterName = diver3;
-                                                        lowest_jumps_and_avaliable = diver3.skydiverJumpsList.size();
+                                                        lowest_jumps_and_avaliable = diver3.jumpsOnDay(flight);
 
                                                     }
                                                 }
@@ -189,13 +189,14 @@ public class SkydiveBookingSystem {
                                             if(diver2.checkjumpTimeAvaliable(diver2, flight, starttimeJ, 0, 25) && diver2.level >= 3 && diver2.dropzone.equals(flight.dropzone) && status != 1 && !diver2.equals(trainee)) {
                                                //we got a match baby book em in
                                                InstructorName = diver2;
+                                               int lowest_jumps_and_avaliable = diver2.jumpsOnDay(flight);
+                                               //System.out.println("So here we got the trainer: " + diver2.name + "with lowest_jumps = " + lowest_jumps_and_avaliable );
 
-                                               int lowest_jumps_and_avaliable = diver2.skydiverJumpsList.size();
                                                 for(Skydiver diver3 : skydivers){
                                                     if(diver2.checkjumpTimeAvaliable(diver3, flight, starttimeJ, 0, 25) && diver3.level >= 3 && diver3.dropzone.equals(flight.dropzone) && status != 1 && !diver3.equals(trainee)) {
-                                                        if(diver3.skydiverJumpsList.size() < lowest_jumps_and_avaliable){
+                                                        if(diver3.jumpsOnDay(flight) < lowest_jumps_and_avaliable){
                                                             InstructorName = diver3;
-                                                            lowest_jumps_and_avaliable = diver3.skydiverJumpsList.size();
+                                                            lowest_jumps_and_avaliable = diver3.jumpsOnDay(flight);
 
                                                         }
                                                     }
@@ -316,6 +317,7 @@ public class SkydiveBookingSystem {
                 for(Jump jump : flight.jumpsInFlight){
                     if (jump.id.equals(Jump_id)){
                         flight.jumpsInFlight.remove(jump);
+                        flight.peopleOnboard = flight.peopleOnboard - jump.numofpeople();
                         break;
                     }    
                 }
@@ -347,6 +349,9 @@ public class SkydiveBookingSystem {
             //STEP 1 COPY JUMP 
             String Jump_id2 = json.getString("id");
             Jump jumpCopy;
+            Flight flightReference = flights.get(0); //this is just so we know its initiallised, may be empty
+            ArrayList<Skydiver> skyydiversReAddJump = new ArrayList<Skydiver>();
+           
             int c = 0;
             while(c < jumps.size()){
                 if (jumps.get(c).id.equals(Jump_id2)){break;} 
@@ -368,6 +373,7 @@ public class SkydiveBookingSystem {
                 for(Jump jump : flight.jumpsInFlight){
                     if (jump.id.equals(Jump_id2)){
                         flight.jumpsInFlight.remove(jump);
+                        flightReference = flight;
                         flight.peopleOnboard = flight.peopleOnboard - jump.numofpeople();
                         break;
                     }    
@@ -377,6 +383,7 @@ public class SkydiveBookingSystem {
                 for(Jump jump : skydiver.skydiverJumpsList){
                     if (jump.id.equals(Jump_id2)){
                         skydiver.skydiverJumpsList.remove(jump);
+                        skyydiversReAddJump.add(skydiver);
                         break;
                     }
                 }
@@ -416,12 +423,12 @@ public class SkydiveBookingSystem {
                                             //we got a match baby book em in
                                             MasterName = diver2;
 
-                                            int lowest_jumps_and_avaliable = diver2.skydiverJumpsList.size();
+                                            int lowest_jumps_and_avaliable = diver2.jumpsOnDay(flight);
                                             for(Skydiver diver3 : skydivers){
                                                 if(diver3.checkjumpTimeAvaliable(diver3, flight, starttimeJC, 5, 10) && diver3.level == 4 && diver3.dropzone.equals(flight.dropzone) && statusC != 1 && !diver3.equals(Tandempassenger)) {
-                                                    if(diver3.skydiverJumpsList.size() < lowest_jumps_and_avaliable){
+                                                    if(diver3.jumpsOnDay(flight) < lowest_jumps_and_avaliable){
                                                         MasterName = diver3;
-                                                        lowest_jumps_and_avaliable = diver3.skydiverJumpsList.size();
+                                                        lowest_jumps_and_avaliable = diver3.jumpsOnDay(flight);
 
                                                     }
                                                 }
@@ -436,7 +443,7 @@ public class SkydiveBookingSystem {
                                             flight.addJump(jumpX);
                                             diver2.skydiverJumpsList.add(jumpX);
                                             Tandempassenger.skydiverJumpsList.add(jumpX);
-                                            status = 1;
+                                            statusC = 1;
 
                                             JSONObject jsonObject = new JSONObject();
                                             jsonObject.put("flight", flight.id);
@@ -461,6 +468,14 @@ public class SkydiveBookingSystem {
                         JSONObject jsonObject = new JSONObject();
                         jsonObject.put("status", "rejected");
                         System.out.println(jsonObject.toString(2));
+                        //also gota remake the old jump
+                        for(Skydiver jumper : skyydiversReAddJump){
+                            
+                            jumper.skydiverJumpsList.add(jumpCopy);
+                        }
+                        flightReference.addJump(jumpCopy);   
+                        jumps.add(jumpCopy);
+
                     }
                     
                     
@@ -485,12 +500,12 @@ public class SkydiveBookingSystem {
                                            //we got a match baby book em in
                                            InstructorName = diver2;
 
-                                           int lowest_jumps_and_avaliable = diver2.skydiverJumpsList.size();
+                                           int lowest_jumps_and_avaliable = diver2.jumpsOnDay(flight);
                                             for(Skydiver diver3 : skydivers){
                                                 if(diver2.checkjumpTimeAvaliable(diver3, flight, starttimeJC, 0, 25) && diver3.level >= 3 && diver3.dropzone.equals(flight.dropzone) && statusC != 1 && !diver3.equals(trainee)) {
-                                                    if(diver3.skydiverJumpsList.size() < lowest_jumps_and_avaliable){
+                                                    if(diver3.jumpsOnDay(flight) < lowest_jumps_and_avaliable){
                                                         InstructorName = diver3;
-                                                        lowest_jumps_and_avaliable = diver3.skydiverJumpsList.size();
+                                                        lowest_jumps_and_avaliable = diver3.jumpsOnDay(flight);
 
                                                     }
                                                 }
@@ -528,8 +543,14 @@ public class SkydiveBookingSystem {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("status", "rejected");
                     System.out.println(jsonObject.toString(2));
+                    for(Skydiver jumper : skyydiversReAddJump){
+                            
+                        jumper.skydiverJumpsList.add(jumpCopy);
+                    }
+                    flightReference.addJump(jumpCopy);   
+                    jumps.add(jumpCopy);
                 }                                                                                                                              
-            break;
+                break;
            
                 case "fun":
                 JSONArray jArray =  json.getJSONArray("skydivers"); 
@@ -589,42 +610,62 @@ public class SkydiveBookingSystem {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("status", "rejected");
                     System.out.println(jsonObject.toString(2));
+
+                    for(Skydiver jumper : skyydiversReAddJump){
+                            
+                        jumper.skydiverJumpsList.add(jumpCopy);
+                    }
+                    flightReference.addJump(jumpCopy, skyydiversReAddJump.size());   
+                    jumps.add(jumpCopy);
                 }    
                 
                 break;
-            //TODO gota also put normal flight back if all failed
-            //we got a copy of the flight in jumpcopy
-
+            
+            
             
             }//this for the switch statement inside change
 
-            break;//this break is for the change case
+        break;//this break is for the change case
 
         case "jump-run":
             String jumpRun = json.getString("id");
-            //JSONArray jsonJumpRunArray = new JSONArray(); // just gona keep making new ones for each jump run
             System.out.print("[");
             for(Flight flight : flights){
                 if(flight.id.equals(jumpRun)){
                     //we in here cos we got the flight we are requesting to see, gota make a single JSONObject of all the jumps in it and format it right
                     
-                    // STEP 1 - SORT THE THE ORDER OF THE FLIGHTS - Thinking make a new array and put them into it in right order then use that array
-                    //ArrayList <Jump> orderedFlightRunArray = new ArrayList<Jump>();
-                    //orderedFlightRunArray = flight.orderJumpTime;
+                    // STEP 1 - SORT THE THE ORDER OF THE jumps - Thinking make a new array and put them into it in right order then use that array
+                    ArrayList<Jump> orderedJumpArray = flight.orderJumpTime();
+                    
+                   
+
+
+
+
+
+
+
                     // STEP 2 - MAKE AN OBJECT FOR EACH JUMP ON THE ARRAY - DIFFERENT JUMP TYPES HAVE DIFFERENT FORMATTING. CAREFULL // this gota be done in function
                     //print it out in the right format once its made, idk how to add fun array to to array so just do individually
-                    for(Jump jump: flight.jumpsInFlight){
+                    for(Jump jump: orderedJumpArray){
                         //ok we gota make an object for this jump, each jumptype has a different format
                         if(jump.type.equals("fun")){
                             FunJump thisJump = (FunJump) jump;
+                            
                             if(thisJump.jumpers.size() != 0){
+                                ArrayList<Skydiver> orderedJumperNames = thisJump.orderAlphabetically();
                                 //System.out.println("the amount of jumpers in this should be: "+ thisJump.jumpers.size());
                                 System.out.print("{\"skydivers\""+": [");
-                                for(Skydiver diver : thisJump.jumpers){
-                                    System.out.println("\"" + diver.name + "\"" + ",");
+                                int last_diver_appostrophie = 0;
+                                for(Skydiver diver : orderedJumperNames){
+                                    System.out.print("\"" + diver.name + "\"" );
+                                    last_diver_appostrophie++;
+                                    if(last_diver_appostrophie != thisJump.jumpers.size()){
+                                        System.out.println(",");
+                                    }
                                     //jsonObject.put("skydivers", diver.name);
                                 }
-                                System.out.print("]}");
+                                System.out.println("]}");
 
                             }    
                         }
@@ -643,8 +684,6 @@ public class SkydiveBookingSystem {
                             System.out.println(jsonObject.toString(2));
                         }   
                     }    
-                    // STEP 3 - PRINT AN ARRAYLIST INSTEAD OF OBJECT 
-                    //printJsonArray(jsonJumpRunArray);
                     System.out.println("]");
                     break; 
                 }
