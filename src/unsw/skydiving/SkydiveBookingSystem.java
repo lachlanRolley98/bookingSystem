@@ -110,7 +110,7 @@ public class SkydiveBookingSystem {
                                         //gona make 
                                         for(Skydiver diver2 : skydivers){                                  
                                             //checkjumpTimeAvaliable(Skydiver jumper, Flight flight, LocalDateTime starttime, int preptime, int posttime)
-                                            if(diver2.checkjumpTimeAvaliable(diver2, flight, starttimeJ, 5, 10) && diver2.level == 4 && diver2.dropzone.equals(flight.dropzone) && status != 1 && !diver2.equals(Tandempassenger)) {
+                                            if(diver2.checkjumpTimeAvaliable(diver2, flight, starttimeJ, 5, 10) && diver2.level > 3 && diver2.dropzone.equals(flight.dropzone) && status != 1 && !diver2.equals(Tandempassenger)) {
                                             //we got a match baby book em in
                                             MasterName = diver2;
                                             //now we can check if there are any other masters with less jumps on the day that take prio
@@ -262,7 +262,7 @@ public class SkydiveBookingSystem {
                                 //so we look at this flight which is the right time
                                 //run through the people to check if they can make it gona have int that counts how many people can do it. if it equals size, we book
                                 for(Skydiver jumper : funJumperArray){
-                                    if(jumper.checkjumpTimeAvaliable(jumper, flight, starttimeJ, 0, 10)){
+                                    if(jumper.checkjumpTimeAvaliable(jumper, flight, starttimeJ, 0, 10) && jumper.level>1) { 
                                         all_jumpers_can_jump_check ++;
                                     }
                                 }
@@ -578,7 +578,7 @@ public class SkydiveBookingSystem {
                             //so we look at this flight which is the right time
                             //run through the people to check if they can make it gona have int that counts how many people can do it. if it equals size, we book
                             for(Skydiver jumper : funJumperArray){
-                                if(jumper.checkjumpTimeAvaliable(jumper, flight, starttimeJC, 0, 10)){
+                                if(jumper.checkjumpTimeAvaliable(jumper, flight, starttimeJC, 0, 10) && jumper.level>1){
                                     all_jumpers_can_jump_check ++;
                                 }
                             }
@@ -717,7 +717,7 @@ public class SkydiveBookingSystem {
 
         try{
         
-        File json = new File("src/unsw/skydiving/s1.json");
+        File json = new File("src/unsw/skydiving/test3_in.json");
         Scanner sc = new Scanner(json);
 
         while (sc.hasNextLine()) { // pre sure this just reads line by line and sends each line individually to system.processCommand

@@ -1,0 +1,25 @@
+{ "command": "flight", "id": "flight1", "dropzone": "Picton", "starttime": "2007-12-02T10:15", "endtime": "2007-12-02T10:35", "maxload": 100 }
+{ "command": "flight", "id": "flight2", "dropzone": "Picton", "starttime": "2007-12-03T10:15", "endtime": "2007-12-03T10:35", "maxload": 100 }
+
+
+{ "command": "skydiver", "skydiver": "Bruno", "licence": "student"}
+{ "command": "skydiver", "skydiver": "Ted", "licence": "licenced-jumper"}
+{ "command": "skydiver", "skydiver": "Borat", "licence": "instructor", "dropzone": "Picton"}
+{ "command": "skydiver", "skydiver": "Alice in Wonderland", "licence": "tandem-master", "dropzone": "Picton"}
+
+{ "command": "request", "type": "fun", "id": "brno is student so should fail", "starttime": "2007-12-02T10:15", "skydivers": ["Bruno"] }
+{ "command": "request", "type": "fun", "id": "ted should pass", "starttime": "2007-12-02T10:15", "skydivers": ["Ted"]}
+{ "command": "request", "type": "fun", "id": "Borat should pass", "starttime": "2007-12-02T10:15", "skydivers": ["Borat"] }
+{ "command": "request", "type": "fun", "id": "Alice should pass", "starttime": "2007-12-02T10:15", "skydivers": ["Alice in Wonderland"] }
+
+
+
+{ "command": "request", "type": "tandem", "id": "Should fail cos no masters", "starttime": "2007-12-03T10:15", "passenger": "Alice in Wonderland" }
+{ "command": "request", "type": "tandem", "id": "Should fail no masters ", "starttime": "2007-12-03T10:15", "passenger": "Ted" }
+{ "command": "request", "type": "training", "id": "Should pass ", "starttime": "2007-12-03T10:15", "trainee": "Bruno" }
+
+
+{ "command": "jump-run", "id": "flight1" }
+{ "command": "jump-run", "id": "flight2" }
+
+

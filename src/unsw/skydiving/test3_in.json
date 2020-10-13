@@ -1,0 +1,37 @@
+{ "command": "flight", "id": "flight1", "dropzone": "a", "starttime": "2007-12-02T10:15", "endtime": "2007-12-02T10:35", "maxload": 20 }
+{ "command": "flight", "id": "flight2", "dropzone": "a", "starttime": "2007-12-03T10:15", "endtime": "2007-12-03T10:35", "maxload": 20 }
+{ "command": "flight", "id": "flight3", "dropzone": "a", "starttime": "2007-12-04T10:15", "endtime": "2007-12-04T10:35", "maxload": 20 }
+{ "command": "flight", "id": "flight4", "dropzone": "a", "starttime": "2007-12-05T10:15", "endtime": "2007-12-05T10:35", "maxload": 20 }
+{ "command": "flight", "id": "flight5", "dropzone": "b", "starttime": "2007-12-06T10:15", "endtime": "2007-12-06T10:35", "maxload": 20 }
+{ "command": "flight", "id": "flight6", "dropzone": "b", "starttime": "2007-12-07T10:15", "endtime": "2007-12-07T10:35", "maxload": 20 }
+{ "command": "flight", "id": "flight7", "dropzone": "b", "starttime": "2007-12-08T10:15", "endtime": "2007-12-08T10:35", "maxload": 20 }
+{ "command": "flight", "id": "flight8", "dropzone": "b", "starttime": "2007-12-09T10:15", "endtime": "2007-12-09T10:35", "maxload": 20 }
+
+
+{ "command": "skydiver", "skydiver": "Bruno", "licence": "student"}
+{ "command": "skydiver", "skydiver": "Ted", "licence": "licenced-jumper"}
+{ "command": "skydiver", "skydiver": "Borat", "licence": "instructor", "dropzone": "a"}
+{ "command": "skydiver", "skydiver": "Alice in Wonderland", "licence": "tandem-master", "dropzone": "b"}
+
+{ "command": "request", "type": "tandem", "id": "wrong dropzone", "starttime": "2007-12-02T10:05", "passenger": "Bruno" }
+{ "command": "request", "type": "training", "id": "all good and we use up Alice", "starttime": "2007-12-06T10:05", "trainee": "Bruno" }
+{ "command": "request", "type": "tandem", "id": "wrong dropzone", "starttime": "2007-12-06T10:05", "passenger": "Bruno" }
+
+{ "command": "request", "type": "fun", "id": "Alice is on jumps so cant", "starttime": "2007-12-06T10:15", "skydivers": ["Borat", "Ted", "Alice in Wonderland"] }
+{ "command": "request", "type": "fun", "id": "good fun jump", "starttime": "2007-12-06T10:15", "skydivers": ["Borat", "Ted"] }
+
+
+
+
+
+
+
+
+{ "command": "jump-run", "id": "flight1" }
+{ "command": "jump-run", "id": "flight2" }
+{ "command": "jump-run", "id": "flight3" }
+{ "command": "jump-run", "id": "flight4" }
+{ "command": "jump-run", "id": "flight5" }
+{ "command": "jump-run", "id": "flight6" }
+{ "command": "jump-run", "id": "flight7" }
+{ "command": "jump-run", "id": "flight8" }
