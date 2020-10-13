@@ -22,7 +22,7 @@ public class Flight {
         this.endtime = endtime;
         this.dropzone = dropzone;
         this.jumpsInFlight = new ArrayList<Jump>();
-        peopleOnboard = 0;
+        peopleOnboard = 0; // get gota change this when people cancell
     }
 
     public void setEndtime(LocalDateTime endtime){

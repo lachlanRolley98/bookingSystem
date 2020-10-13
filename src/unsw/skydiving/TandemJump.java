@@ -22,4 +22,8 @@ public class TandemJump extends Jump{
         passenger.earliestJumptime = endtime;
     }
     
+    @Override
+    public int numofpeople(){
+        return 2;
+    }
 }

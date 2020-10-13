@@ -9,9 +9,14 @@ public class Jump {
     public LocalDateTime endtime;
     public String desination;
 
+
     //gota make contructor
     //this will never be called, will always be making the subclasses
     public Jump(){}
+
+    public int numofpeople(){
+        return 0;
+    }
     
     
     

@@ -21,5 +21,10 @@ public class TrainingJump extends Jump{
         InstructorName.earliestJumptime = endtime.plusMinutes(25); // he gota repack, the passenger doesnt
         traineeName.earliestJumptime = endtime.plusMinutes(15);
     }
+
+    @Override
+    public int numofpeople(){
+        return 2;
+    }
     
-}
+}   

@@ -21,6 +21,11 @@ public class FunJump extends Jump{
         jumper.earliestJumptime = endtime.plusMinutes(10);
     }
 
+    @Override
+    public int numofpeople(){
+        return jumpers.size();
+    }
+
     
 
     
